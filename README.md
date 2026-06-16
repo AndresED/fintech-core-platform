@@ -2,7 +2,7 @@
 
 Implementación progresiva del backend fintech — **reconstruido desde cero**, fase a fase, con ritmo de estudio profundo.
 
-**Origen:** inspirado por [esta publicación de LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7469881203920351232/) y [arkano-banking-challenge](https://github.com/AndresED/arkano-banking-challenge).
+**Origen:** inspirado por [esta publicación de LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7469881203920351232/) y [arkano-banking-challenge](https://github.com/AndresED/arkano-banking-challenge) (reto técnico reciente).
 
 **Artículos (serie canónica):** https://www.makingcode.dev/series/fintech-core-platform  
 **LinkedIn:** resumen por fase → enlace al artículo del blog.
@@ -74,7 +74,7 @@ fintech-core-platform/
 
 1. Empieza por [`docs/phases/phase-0/README.md`](./docs/phases/phase-0/README.md) (cuando exista código).
 2. Cada fase es mergeable de forma independiente; tags `phase-0`, `phase-1`, …
-3. Teoría profunda: repo privado (no enlazado públicamente).
+3. Cada fase incluye en `docs/phases/phase-N/` documentación técnica y guías de prueba.
 
 ## Stack
 
