@@ -7,3 +7,11 @@ coverage
 .DS_Store
 .idea
 .vscode
+.cursor
+
+# TypeScript emit artifacts outside dist
+libs/**/src/**/*.js
+libs/**/src/**/*.js.map
+libs/**/src/**/*.d.ts
+libs/**/src/**/*.d.ts.map
+!libs/**/src/**/*.ts
