@@ -52,4 +52,4 @@ apps/accounts-service/src/accounts/
 
 ## Siguiente fase
 
-[Fase 1 — Ledger](../phase-1/README.md)
+[Fase 1 — Dinero y ledger](../phase-1/README.md)
