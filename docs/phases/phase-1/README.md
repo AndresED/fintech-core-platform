@@ -1,33 +1,33 @@
-# Fase 1 — Dinero y ledger (en progreso)
+# Fase 1 — Dinero y ledger
 
-> **Estado:** Parcial (post #3) — value object `Money` implementado  
-> **Teoría:** T-04, T-05  
-> **Artículo:** [Modelar dinero en código](https://www.makingcode.dev/blog/modelar-dinero-en-codigo-fintech)
+> **Estado:** Implementado (posts #3 y #4)  
+> **Teoría:** T-04, T-05, T-06, T-07  
+> **Artículos:** [Modelar dinero](https://www.makingcode.dev/blog/modelar-dinero-en-codigo-fintech) · [Ledger interno](https://www.makingcode.dev/blog/ledger-interno-transferencias-fintech)
 
 ## Objetivo de la fase
 
-Movimientos contables, saldo derivado, invariantes (sin saldo negativo). El post #3 cubre el **tipo** `Money`; el post #4 cubrirá ledger y endpoints.
+Movimientos append-only, saldo derivado, invariantes (sin saldo negativo), depósito idempotente.
 
-## Qué incluye (post #3)
+## Qué incluye
 
-- [x] Value object `Money` en `@fintech/domain-common`
-- [x] Centavos como `bigint`, moneda explícita
-- [x] Errores de dominio: negativo, moneda distinta, fondos insuficientes
-- [x] Tests unitarios (incl. regresión float `0.1 + 0.2`)
-
-## Pendiente (post #4)
-
-- [ ] Entidad `LedgerEntry` / movimientos append-only
-- [ ] `POST /accounts/:id/deposit`
-- [ ] `GET /accounts/:id/balance`
-- [ ] Idempotency-Key en depósitos
+- [x] Value object `Money` en `@fintech/domain-common` (post #3)
+- [x] Tabla `ledger_entries` (credit/debit, centavos `bigint`)
+- [x] `POST /accounts/:id/deposit` con `Idempotency-Key`
+- [x] `GET /accounts/:id/balance`
+- [x] `POST /accounts/transfers` (dos movimientos, una transacción)
+- [x] Tests unitarios de transferencia e insuficiencia de fondos
 
 ## Cómo probar
 
 ```bash
 pnpm install
-pnpm --filter @fintech/domain-common test
+docker compose -f infra/docker/docker-compose.yml up -d
+cp apps/accounts-service/.env.example apps/accounts-service/.env
+pnpm dev:accounts
+pnpm test
 ```
+
+Swagger: http://localhost:3001/api/docs
 
 ## Siguiente fase
 

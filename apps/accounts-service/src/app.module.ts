@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountsModule } from './accounts/accounts.module';
 import { HealthController } from './health/health.controller';
 import { AccountOrmEntity } from './accounts/infrastructure/persistence/account.orm-entity';
+import { LedgerEntryOrmEntity } from './accounts/infrastructure/persistence/ledger-entry.orm-entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { AccountOrmEntity } from './accounts/infrastructure/persistence/account.
         username: config.get<string>('DATABASE_USER', 'fintech'),
         password: config.get<string>('DATABASE_PASSWORD', 'fintech'),
         database: config.get<string>('DATABASE_NAME', 'accounts'),
-        entities: [AccountOrmEntity],
+        entities: [AccountOrmEntity, LedgerEntryOrmEntity],
         synchronize: config.get<string>('NODE_ENV', 'development') !== 'production',
       }),
     }),

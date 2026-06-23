@@ -1,4 +1,5 @@
 import { AccountClosedError } from '../errors/account-closed.error';
+import { AccountNotActiveError } from '../errors/account-not-active.error';
 import { AccountId } from '../value-objects/account-id.vo';
 import { AccountStatus } from '../value-objects/account-status.vo';
 
@@ -36,5 +37,11 @@ export class Account {
       throw new AccountClosedError(this.id);
     }
     this._status = AccountStatus.SUSPENDED;
+  }
+
+  assertCanTransact(): void {
+    if (this._status !== AccountStatus.ACTIVE) {
+      throw new AccountNotActiveError(this.id);
+    }
   }
 }

@@ -16,8 +16,8 @@ async function bootstrap(): Promise<void> {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Fintech Core — Accounts')
-    .setDescription('Phase 0: modular monolith, hexagonal accounts context')
-    .setVersion('0.1.0')
+    .setDescription('Phase 1: accounts + ledger (deposits, balance, internal transfers)')
+    .setVersion('0.2.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
