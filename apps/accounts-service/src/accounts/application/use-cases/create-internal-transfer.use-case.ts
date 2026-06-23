@@ -1,11 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
+import { InternalTransferCompletedEvent } from '../../domain/events/internal-transfer-completed.event';
 import { LedgerEntry } from '../../domain/entities/ledger-entry.entity';
 import { AccountNotFoundError } from '../../domain/errors/account-not-found.error';
 import {
   ACCOUNT_REPOSITORY,
   type AccountRepositoryPort,
 } from '../../domain/ports/account.repository.port';
+import {
+  DOMAIN_EVENT_PUBLISHER,
+  type DomainEventPublisherPort,
+} from '../../domain/ports/domain-event-publisher.port';
 import {
   LEDGER_REPOSITORY,
   type LedgerRepositoryPort,
@@ -23,6 +28,8 @@ export class CreateInternalTransferUseCase {
     private readonly accounts: AccountRepositoryPort,
     @Inject(LEDGER_REPOSITORY)
     private readonly ledger: LedgerRepositoryPort,
+    @Inject(DOMAIN_EVENT_PUBLISHER)
+    private readonly domainEvents: DomainEventPublisherPort,
   ) {}
 
   async execute(command: InternalTransferCommand): Promise<InternalTransferResult> {
@@ -61,6 +68,15 @@ export class CreateInternalTransferUseCase {
     });
 
     await this.ledger.appendEntries([debit, credit]);
+
+    await this.domainEvents.publish(
+      new InternalTransferCompletedEvent(
+        transferReference,
+        fromId,
+        toId,
+        command.amount,
+      ),
+    );
 
     const updatedFromBalance = await this.ledger.computeBalance(fromId);
     const updatedToBalance = await this.ledger.computeBalance(toId);

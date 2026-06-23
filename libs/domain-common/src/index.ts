@@ -1,4 +1,5 @@
 export { DomainError } from './domain-error';
+export type { DomainEvent } from './events/domain-event';
 export {
   CurrencyMismatchError,
   InsufficientFundsError,

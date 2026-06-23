@@ -6,7 +6,16 @@ import { AccountId } from '../../domain/value-objects/account-id.vo';
 import { LedgerDirection } from '../../domain/value-objects/ledger-direction.vo';
 import type { AccountRepositoryPort } from '../../domain/ports/account.repository.port';
 import type { LedgerRepositoryPort } from '../../domain/ports/ledger.repository.port';
+import type { DomainEventPublisherPort } from '../../domain/ports/domain-event-publisher.port';
 import { CreateInternalTransferUseCase } from './create-internal-transfer.use-case';
+
+class NoopDomainEventPublisher implements DomainEventPublisherPort {
+  readonly published: unknown[] = [];
+
+  async publish(event: unknown): Promise<void> {
+    this.published.push(event);
+  }
+}
 
 class InMemoryAccountRepository implements AccountRepositoryPort {
   constructor(private readonly store: Map<string, Account>) {}
@@ -64,9 +73,11 @@ describe('CreateInternalTransferUseCase', () => {
       LedgerEntry.credit({ accountId: fromId, amount: Money.fromCents(1000n) }),
     ]);
 
+    const domainEvents = new NoopDomainEventPublisher();
     const useCase = new CreateInternalTransferUseCase(
       new InMemoryAccountRepository(accounts),
       ledger,
+      domainEvents,
     );
 
     const result = await useCase.execute({
@@ -76,6 +87,7 @@ describe('CreateInternalTransferUseCase', () => {
     });
 
     expect(ledger.entries).toHaveLength(3);
+    expect(domainEvents.published).toHaveLength(1);
     expect(result.fromBalance.amountCents).toBe(600n);
     expect(result.toBalance.amountCents).toBe(400n);
   });
@@ -92,6 +104,7 @@ describe('CreateInternalTransferUseCase', () => {
     const useCase = new CreateInternalTransferUseCase(
       new InMemoryAccountRepository(accounts),
       ledger,
+      new NoopDomainEventPublisher(),
     );
 
     await expect(
